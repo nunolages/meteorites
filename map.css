@@ -2,6 +2,18 @@ svg {
   background: #fff;
 }
 
+
+.countries {
+  fill: #fff;
+  stroke: #000;
+}
+
+.circles {
+  fill: red;
+  stroke: #29d;
+}
+
+
 .sphere {
   fill: #fff;
 }
