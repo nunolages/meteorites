@@ -27,6 +27,15 @@ var map = d3.select("body") //"select" grabs a DOM element
     .attr("height", height);
     // ".style" would customize the local style
 
+// Tooltip
+// http://bl.ocks.org/Caged/6476579
+// http://bl.ocks.org/mbostock/1087001
+//TODO Add fade in, fade out effects to tooltip.
+//TODO Position tooltip somewhere appropriate.
+var tip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("display", "none");
+
 // load and display the World
 d3.json("world-110m.json", function(error, topology) {
 
@@ -66,15 +75,21 @@ d3.csv("Meteorite_Landings_short.csv",
                     //console.log(d.lat);
                     return projection([+d.reclong, +d.reclat])[1];
                 })
-            .style("fill", "red");
-
-        //lat: +d.reclat,
-        //long: +d.reclong
-
+            .style("fill", "red")
+            .on("mouseover",
+                function mouseover(d) {
+                    tip.style("opacity", 0.5)
+                        .text("mass = " + d.mass + "g")
+                        .style("display", "inline");
+                })
+            .on("mouseout",
+                function mouseout(d) {
+                    tip.style("display", "none");
+                });
     });
-    //.get(function(error, rows) { console.log(d.long); });
 
-// zoom and pan
+// pan and zoom
+// http://bl.ocks.org/d3noob/5193723
 var zoom = d3.behavior.zoom()
     .on("zoom",function() {
         map.attr("transform","translate("+
@@ -91,16 +106,4 @@ var zoom = d3.behavior.zoom()
 
 map.call(zoom)
 
-
-//d3.csv("Meteorite_Landings.csv")
-//    .row(function(d) {
-//        return {
-//            //m: parseInt(d.mass, 10),
-//            //y: d.year,
-//            lat: +d.reclat,
-//            long: +d.reclong,
-//            m: +d.grams,
-//            y: (new Date(d.year)).getFullYear()
-//        }})
-//    .get(function(error, rows) { console.log(rows); });
 
